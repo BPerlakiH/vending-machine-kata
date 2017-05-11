@@ -47,18 +47,18 @@ public class DisplayTest {
 
     @Test
     public void testValues() {
-        Assert.assertEquals("display should be empty by default", display.getMessage(), "");
+        Assert.assertEquals("display should be empty by default", "",  display.getMessage());
         display.showPrice(input);
-        Assert.assertEquals("should display the set price", display.getMessage(), expected);
+        Assert.assertEquals("should display the set price", expected, display.getMessage());
 
         display.showOutOfStock();
-        Assert.assertNotEquals("should show out of stock message", display.getMessage(), expected);
+        Assert.assertNotEquals("should show out of stock message", expected, display.getMessage());
         Assert.assertTrue("should contain words 'out of stock'", display.getMessage().toLowerCase().contains("out of stock"));
         String outOfStockMsg = display.getMessage();
 
         display.showOutOfChange();
-        Assert.assertNotEquals("should show out of change message", display.getMessage(), expected);
-        Assert.assertNotEquals("should be different from out of stock message", display.getMessage(), outOfStockMsg);
+        Assert.assertNotEquals("should show out of change message", expected, display.getMessage());
+        Assert.assertNotEquals("should be different from out of stock message", outOfStockMsg, display.getMessage());
         Assert.assertTrue("should contain words 'out of stock'", display.getMessage().toLowerCase().contains("out of change"));
     }
 }
