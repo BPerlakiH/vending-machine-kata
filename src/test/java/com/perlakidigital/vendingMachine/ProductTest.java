@@ -15,7 +15,7 @@ public class ProductTest {
 
     @Before
     public void setUp() throws Exception {
-        this.product = new Product("testname");
+        this.product = new Product("test name");
     }
 
     @After
@@ -29,8 +29,9 @@ public class ProductTest {
         Assert.assertTrue("should have a positive price by default", 0 < soda.getPrice());
         soda.setPrice(0.1);
         Assert.assertTrue("should be still positive", 0 < soda.getPrice());
-        soda.setName("sparky mineral water");
-        Assert.assertEquals("name should update", "sparky mineral water", soda.getName());
+        String newName = "sparky mineral water";
+        soda.setName(newName);
+        Assert.assertEquals("name should update and retain", newName, soda.getName());
     }
 
     @Test
