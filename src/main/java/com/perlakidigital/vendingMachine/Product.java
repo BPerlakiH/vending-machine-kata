@@ -1,7 +1,7 @@
 package com.perlakidigital.vendingMachine;
 
 /**
- * Product represents a buyable good with a non-negative price and a name
+ * Product represents a purchasable good with a non-negative price and a name
  * Created by BPerlakiH on 05/05/2017.
  */
 class Product {
@@ -13,6 +13,10 @@ class Product {
         setName(name);
     }
 
+    /**
+     * @param name - product name, currently serves as an identifier as well
+     * @param price - larger than zero price of the product
+     */
     Product(String name, double price) {
         setName(name);
         setPrice(price);
