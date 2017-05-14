@@ -1,4 +1,4 @@
-package com.perlakidigital.vendingMachine;
+package com.perlakidigital.vendingMachine.display;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -19,7 +19,7 @@ public class DisplayTest {
 
     private final double input;
     private final String expected;
-    private Display display;
+    private IDisplay display;
 
     public DisplayTest(double inputValue, String expectedValue) {
         input = inputValue;
@@ -60,5 +60,8 @@ public class DisplayTest {
         Assert.assertNotEquals("should show out of change message", expected, display.getMessage());
         Assert.assertNotEquals("should be different from out of stock message", outOfStockMsg, display.getMessage());
         Assert.assertTrue("should contain words 'out of stock'", display.getMessage().toLowerCase().contains("out of change"));
+
+        display.clearScreen();
+        Assert.assertTrue("the display should be empty", display.getMessage().isEmpty());
     }
 }

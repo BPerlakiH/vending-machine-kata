@@ -1,10 +1,10 @@
-package com.perlakidigital.vendingMachine;
+package com.perlakidigital.vendingMachine.display;
 
 /**
  * The display of the vending machine, supporting price and error messages
  * Created by BPerlakiH on 06/05/2017.
  */
-class Display {
+class Display implements IDisplay {
 
     private static final String OUT_OF_STOCK = "Out of stock";
     private static final String OUT_OF_CHANGE = "Out of change";
@@ -15,21 +15,23 @@ class Display {
      *
      * @return the default message
      */
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    void showOutOfStock() {
+    public void showOutOfStock() {
         message = OUT_OF_STOCK;
     }
 
-    void showOutOfChange() {
+    public void showOutOfChange() {
         message = OUT_OF_CHANGE;
     }
 
-    void showPrice(double price) {
+    public void showPrice(double price) {
         message = String.format("%.2f", price);
     }
 
-
+    public void clearScreen() {
+        message = "";
+    }
 }
