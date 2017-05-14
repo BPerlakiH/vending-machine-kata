@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Aims to calculate if a given list of coins can be divided up to cover a given amount and get the change
  * On success it divides up the coins into change and remainingCoins
- * <p>
  * Created by BPerlakiH on 09/05/2017.
  */
 class CoinCounter {
