@@ -121,7 +121,22 @@ public class TransactionTest {
 
         double currentTillTotal = trans.getTill().stream().reduce(0.0, Double::sum);
         Assert.assertEquals("the till should not change at all", initialTillTotal, currentTillTotal, 0.01);
+    }
 
+    /**
+     * The user changes his mind and picks another product, which is cheaper
+     */
+    @Test
+    public void updatePrice() throws Exception {
+        trans.addCoin(2.0);
+        trans.addCoin(1.0);
+        trans.addCoin(5.0);
+        //the user changes his mind, and picks a cheaper product
+        trans.setProductPrice(2.0);
+
+        assertDuePrice(0.0);
+        assertTotalChangeEquals(6.0);
+        Assert.assertTrue("the transaction should finish", trans.isComplete());
     }
 
     private void addCoins(double value, int times) {

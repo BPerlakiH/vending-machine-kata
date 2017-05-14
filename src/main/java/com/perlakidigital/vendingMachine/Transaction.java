@@ -10,14 +10,14 @@ import java.util.Collection;
  * (it's a separation of concern, we calculate things up until that point and no further)
  * Created by BPerlakiH on 08/05/2017.
  */
-class Transaction {
+public class Transaction {
 
     static final Collection<Double> DEFAULT_DENOMINATIONS = Arrays.asList(0.1, 0.2, 0.5, 1.0, 2.0, 5.0);
-    private final double price;
     private final ArrayList<Double> change;
     private final ArrayList<Double> coins;
     private final ArrayList<Double> till;
     private final Collection<Double> denominations;
+    private double price;
     private double duePrice;
     private boolean isComplete = false;
 
@@ -25,7 +25,7 @@ class Transaction {
      * @param coinsInTill  - A cash register that contains the coins we already have before the transaction
      * @param productPrice - The total price of the transaction / purchase
      */
-    Transaction(Collection<Double> coinsInTill, double productPrice) {
+    public Transaction(Collection<Double> coinsInTill, double productPrice) {
         denominations = DEFAULT_DENOMINATIONS;
         price = productPrice;
         duePrice = price;
@@ -34,10 +34,15 @@ class Transaction {
         coins = new ArrayList<>();
     }
 
+    public void setProductPrice(double productPrice) {
+        price = productPrice;
+        processCoins();
+    }
+
     /**
      * Get the remaining amount to be paid
      */
-    double getDuePrice() {
+    public double getDuePrice() {
         return duePrice;
     }
 
@@ -51,7 +56,7 @@ class Transaction {
     /**
      * Cancel the transaction, return the change if any
      */
-    void cancel() {
+    public void cancel() {
         change.addAll(coins);
         coins.clear();
         isComplete = false;
@@ -62,7 +67,7 @@ class Transaction {
      *
      * @return the change in coins
      */
-    Collection<Double> getChange() {
+    public Collection<Double> getChange() {
         return change;
     }
 
@@ -73,7 +78,7 @@ class Transaction {
         return till;
     }
 
-    void addCoin(double value) {
+    public void addCoin(double value) {
         change.clear();
         if (isValidCoin(value)) {
             coins.add(value);
@@ -89,7 +94,7 @@ class Transaction {
      *
      * @return is enough coins inserted or not
      */
-    boolean isComplete() {
+    public boolean isComplete() {
         return isComplete;
     }
 
