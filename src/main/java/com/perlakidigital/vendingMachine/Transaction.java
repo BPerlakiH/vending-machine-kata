@@ -13,23 +13,24 @@ import java.util.Collection;
 public class Transaction {
 
     static final Collection<Double> DEFAULT_DENOMINATIONS = Arrays.asList(0.1, 0.2, 0.5, 1.0, 2.0, 5.0);
+    /**
+     * A cash register that contains the coins we already have before the transaction
+     */
+    final ArrayList<Double> till = new ArrayList<>(DEFAULT_DENOMINATIONS); //start with a non-empty till
     private final ArrayList<Double> change;
     private final ArrayList<Double> coins;
-    private final ArrayList<Double> till;
     private final Collection<Double> denominations;
     private double price;
     private double duePrice;
     private boolean isComplete = false;
 
     /**
-     * @param coinsInTill  - A cash register that contains the coins we already have before the transaction
      * @param productPrice - The total price of the transaction / purchase
      */
-    public Transaction(Collection<Double> coinsInTill, double productPrice) {
+    public Transaction(double productPrice) {
         denominations = DEFAULT_DENOMINATIONS;
         price = productPrice;
         duePrice = price;
-        till = new ArrayList<>(coinsInTill);
         change = new ArrayList<>();
         coins = new ArrayList<>();
     }

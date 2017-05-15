@@ -5,10 +5,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Testing various transaction scenarios that could occur during product purchase
@@ -17,14 +15,12 @@ import java.util.List;
 public class TransactionTest {
 
     private final double productPrice = 19.90;
-    private List<Double> till;
     private Transaction trans;
 
     @Before
     public void setUp() throws Exception {
-        till = new ArrayList<>(Transaction.DEFAULT_DENOMINATIONS);
-        till.addAll(Transaction.DEFAULT_DENOMINATIONS); ///add each possible coin twice
-        trans = new Transaction(till, productPrice);
+        trans = new Transaction(productPrice);
+        trans.till.addAll(Transaction.DEFAULT_DENOMINATIONS); ///add each possible coin twice
     }
 
     @After
@@ -75,7 +71,6 @@ public class TransactionTest {
         assertDuePrice(0.0);
         Assert.assertTrue("once paid enough, the transaction should be complete", trans.isComplete());
         assertNoChange();
-        till = trans.getTill();
         Assert.assertEquals("we should see cash flowing into the till after a purchase", totalInTill + 19.9, getTotalInTill(), 0.01);
     }
 
@@ -85,7 +80,6 @@ public class TransactionTest {
         addCoins(5.0, 4);
         assertDuePrice(0.0);
         assertTotalChangeEquals(0.1);
-        till = trans.getTill();
         Assert.assertEquals("we should see cash flowing into the till after a purchase", totalInTill + 19.9, getTotalInTill(), 0.01);
     }
 
@@ -112,7 +106,10 @@ public class TransactionTest {
     public void outOfCoins() throws Exception {
         Collection<Double> smallTill = Arrays.asList(0.2, 0.5, 1.0, 5.0, 5.0);
         double initialTillTotal = smallTill.stream().reduce(0.0, Double::sum);
-        trans = new Transaction(smallTill, 0.9);
+        trans = new Transaction(0.9);
+        trans.till.clear();
+        trans.till.addAll(smallTill);
+
         trans.addCoin(2.0);
         //we should get back 1.10 but that's not really possible from these coins
         //therefore we should get back our 2.0 coin
@@ -150,7 +147,7 @@ public class TransactionTest {
     }
 
     private double getTotalInTill() {
-        return till.stream().reduce(0.0, Double::sum);
+        return trans.till.stream().reduce(0.0, Double::sum);
     }
 
     private double getTotalChange() {
