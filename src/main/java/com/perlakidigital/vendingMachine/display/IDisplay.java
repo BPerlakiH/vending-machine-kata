@@ -12,6 +12,8 @@ public interface IDisplay {
 
     void showOutOfChange();
 
+    void showSelectionRequired();
+
     void showPrice(double price);
 
     void clearScreen();

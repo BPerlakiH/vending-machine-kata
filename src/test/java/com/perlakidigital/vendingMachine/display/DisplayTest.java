@@ -63,5 +63,8 @@ public class DisplayTest {
 
         display.clearScreen();
         Assert.assertTrue("the display should be empty", display.getMessage().isEmpty());
+
+        display.showSelectionRequired();
+        Assert.assertTrue("should contain words 'please select'", display.getMessage().toLowerCase().contains("please select"));
     }
 }

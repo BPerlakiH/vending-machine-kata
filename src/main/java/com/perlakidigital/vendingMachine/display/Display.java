@@ -8,6 +8,7 @@ class Display implements IDisplay {
 
     private static final String OUT_OF_STOCK = "Out of stock";
     private static final String OUT_OF_CHANGE = "Out of change";
+    private static final String SELECTION_REQUIRED = "Please select a product first";
     private String message = "";
 
     /**
@@ -25,6 +26,10 @@ class Display implements IDisplay {
 
     public void showOutOfChange() {
         message = OUT_OF_CHANGE;
+    }
+
+    public void showSelectionRequired() {
+        message = SELECTION_REQUIRED;
     }
 
     public void showPrice(double price) {
