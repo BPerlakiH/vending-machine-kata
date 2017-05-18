@@ -64,12 +64,14 @@ public class Transaction {
     }
 
     /**
-     * Assuming that the change is "picked up" before new coins are inserted
+     * Assuming that the change is "picked up" right away before new coins are inserted
      *
      * @return the change in coins
      */
     public Collection<Double> getChange() {
-        return change;
+        Collection<Double> returnChanges = new ArrayList<>(change);
+        change.clear();
+        return returnChanges;
     }
 
     /**
@@ -79,6 +81,14 @@ public class Transaction {
         return till;
     }
 
+
+    /**
+     * Add new coins to the transaction
+     * Invalid coins fall straight out as change
+     * Assumes that the change is "picked up" before new coins are inserted
+     *
+     * @param value - the face value of the coin
+     */
     public void addCoin(double value) {
         change.clear();
         if (isValidCoin(value)) {
