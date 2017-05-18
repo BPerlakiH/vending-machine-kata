@@ -4,7 +4,7 @@ package com.perlakidigital.vendingMachine.display;
  * The display of the vending machine, supporting price and error messages
  * Created by BPerlakiH on 06/05/2017.
  */
-class Display implements IDisplay {
+public class Display implements IDisplay {
 
     private static final String OUT_OF_STOCK = "Out of stock";
     private static final String OUT_OF_CHANGE = "Out of change";
