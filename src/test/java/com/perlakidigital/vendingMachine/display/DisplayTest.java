@@ -51,12 +51,12 @@ public class DisplayTest {
         display.showPrice(input);
         Assert.assertEquals("should display the set price", expected, display.getMessage());
 
-        display.showOutOfStock();
+        display.showMessage(Message.getOutOfStock());
         Assert.assertNotEquals("should show out of stock message", expected, display.getMessage());
         Assert.assertTrue("should contain words 'out of stock'", display.getMessage().toLowerCase().contains("out of stock"));
         String outOfStockMsg = display.getMessage();
 
-        display.showOutOfChange();
+        display.showMessage(Message.getOutOfChange());
         Assert.assertNotEquals("should show out of change message", expected, display.getMessage());
         Assert.assertNotEquals("should be different from out of stock message", outOfStockMsg, display.getMessage());
         Assert.assertTrue("should contain words 'out of stock'", display.getMessage().toLowerCase().contains("out of change"));
@@ -64,7 +64,7 @@ public class DisplayTest {
         display.clearScreen();
         Assert.assertTrue("the display should be empty", display.getMessage().isEmpty());
 
-        display.showSelectionRequired();
+        display.showMessage(Message.getSelectionRequired());
         Assert.assertTrue("should contain words 'please select'", display.getMessage().toLowerCase().contains("please select"));
     }
 }

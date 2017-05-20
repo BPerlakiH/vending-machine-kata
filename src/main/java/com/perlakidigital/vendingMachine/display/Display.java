@@ -6,9 +6,6 @@ package com.perlakidigital.vendingMachine.display;
  */
 public class Display implements IDisplay {
 
-    private static final String OUT_OF_STOCK = "Out of stock";
-    private static final String OUT_OF_CHANGE = "Out of change";
-    private static final String SELECTION_REQUIRED = "Please select a product first";
     private String message = "";
 
     /**
@@ -16,27 +13,23 @@ public class Display implements IDisplay {
      *
      * @return the default message
      */
+    @Override
     public String getMessage() {
         return message;
     }
 
-    public void showOutOfStock() {
-        message = OUT_OF_STOCK;
-    }
-
-    public void showOutOfChange() {
-        message = OUT_OF_CHANGE;
-    }
-
-    public void showSelectionRequired() {
-        message = SELECTION_REQUIRED;
-    }
-
+    @Override
     public void showPrice(double price) {
-        message = String.format("%.2f", price);
+        showMessage(String.format("%.2f", price));
     }
 
+    @Override
+    public void showMessage(String msg) {
+        message = msg;
+    }
+
+    @Override
     public void clearScreen() {
-        message = "";
+        showMessage("");
     }
 }

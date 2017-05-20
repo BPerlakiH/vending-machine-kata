@@ -8,14 +8,10 @@ public interface IDisplay {
 
     String getMessage();
 
-    void showOutOfStock();
-
-    void showOutOfChange();
-
-    void showSelectionRequired();
-
     void showPrice(double price);
 
     void clearScreen();
+
+    void showMessage(String msg);
 
 }
