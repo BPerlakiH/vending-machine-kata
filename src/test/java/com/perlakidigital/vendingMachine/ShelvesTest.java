@@ -42,6 +42,17 @@ public class ShelvesTest {
     }
 
     @Test
+    public void emptyAfterUse() throws Exception {
+        shelves.addShelf("water", 1.0, 1);
+        shelves.addShelf("choco", 1.2, 1);
+        Assert.assertFalse(shelves.isEmpty());
+        shelves.releaseAProductFrom(0); //release the water
+        Assert.assertFalse(shelves.isEmpty());
+        shelves.releaseAProductFrom(1); //release the choco
+        Assert.assertTrue(shelves.isEmpty());
+    }
+
+    @Test
     public void fillUpPeakAndRelease() {
         shelves
             .addShelf("water", 1.22, 10)        //0
@@ -69,7 +80,7 @@ public class ShelvesTest {
 
     private void testPeakAndRelease(int index, String expectedName, double expectedPrice) {
         Assert.assertFalse(shelves.isEmptyAt(index));
-        Product productPeaked = shelves.peakAtTopProductOn(index);
+        Product productPeaked = shelves.getFirstProductFrom(index);
         Product product = shelves.releaseAProductFrom(index);
         Assert.assertEquals(productPeaked, product);
         Assert.assertEquals("product name should match", product.getName(), expectedName);
