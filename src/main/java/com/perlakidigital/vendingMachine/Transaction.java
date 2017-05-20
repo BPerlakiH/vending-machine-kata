@@ -75,14 +75,6 @@ public class Transaction {
     }
 
     /**
-     * Get the current status of our till / cash register
-     */
-    ArrayList<Double> getTill() {
-        return till;
-    }
-
-
-    /**
      * Add new coins to the transaction
      * Invalid coins fall straight out as change
      * Assumes that the change is "picked up" before new coins are inserted
