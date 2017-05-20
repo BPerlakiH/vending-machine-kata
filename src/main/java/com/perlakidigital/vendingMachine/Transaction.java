@@ -10,34 +10,41 @@ import java.util.Collection;
  * (it's a separation of concern, we calculate things up until that point and no further)
  * Created by BPerlakiH on 08/05/2017.
  */
-class Transaction {
+public class Transaction {
 
     static final Collection<Double> DEFAULT_DENOMINATIONS = Arrays.asList(0.1, 0.2, 0.5, 1.0, 2.0, 5.0);
-    private final double price;
+    /**
+     * A cash register that contains the coins we already have before the transaction
+     */
+    final ArrayList<Double> till = new ArrayList<>(DEFAULT_DENOMINATIONS); //start with a non-empty till
     private final ArrayList<Double> change;
     private final ArrayList<Double> coins;
-    private final ArrayList<Double> till;
     private final Collection<Double> denominations;
+    private final ITransactionDelegate delegate;
+    private double price;
     private double duePrice;
-    private boolean isComplete = false;
 
     /**
-     * @param coinsInTill  - A cash register that contains the coins we already have before the transaction
      * @param productPrice - The total price of the transaction / purchase
      */
-    Transaction(Collection<Double> coinsInTill, double productPrice) {
+    public Transaction(double productPrice, ITransactionDelegate delegate) {
+        this.delegate = delegate;
         denominations = DEFAULT_DENOMINATIONS;
         price = productPrice;
         duePrice = price;
-        till = new ArrayList<>(coinsInTill);
         change = new ArrayList<>();
         coins = new ArrayList<>();
+    }
+
+    public void setProductPrice(double productPrice) {
+        price = productPrice;
+        processCoins();
     }
 
     /**
      * Get the remaining amount to be paid
      */
-    double getDuePrice() {
+    public double getDuePrice() {
         return duePrice;
     }
 
@@ -51,29 +58,30 @@ class Transaction {
     /**
      * Cancel the transaction, return the change if any
      */
-    void cancel() {
+    public void cancel() {
         change.addAll(coins);
         coins.clear();
-        isComplete = false;
     }
 
     /**
-     * Assuming that the change is "picked up" before new coins are inserted
+     * Assuming that the change is "picked up" right away before new coins are inserted
      *
      * @return the change in coins
      */
-    Collection<Double> getChange() {
-        return change;
+    public Collection<Double> getChange() {
+        Collection<Double> returnChanges = new ArrayList<>(change);
+        change.clear();
+        return returnChanges;
     }
 
     /**
-     * Get the current status of our till / cash register
+     * Add new coins to the transaction
+     * Invalid coins fall straight out as change
+     * Assumes that the change is "picked up" before new coins are inserted
+     *
+     * @param value - the face value of the coin
      */
-    ArrayList<Double> getTill() {
-        return till;
-    }
-
-    void addCoin(double value) {
+    public void addCoin(double value) {
         change.clear();
         if (isValidCoin(value)) {
             coins.add(value);
@@ -84,31 +92,21 @@ class Transaction {
         }
     }
 
-    /**
-     * A transaction is complete when the sum of inserted coins is equal (an exact amount) or above the price
-     *
-     * @return is enough coins inserted or not
-     */
-    boolean isComplete() {
-        return isComplete;
-    }
-
-
     private void processCoins() {
         Double coinsTotal = getCoinsTotal();
         if (coinsTotal < price) {
+            duePrice = price - coinsTotal;
             //the transaction is still ongoing, keep collecting coins, do nothing else
-            duePrice = (price * 100 - coinsTotal * 100) / 100;
-            isComplete = false;
+            delegate.onContinue();
             return;
         }
         if (coinsTotal == price) {
             //we got the exact amount, no change is necessary
             duePrice = 0;
-            isComplete = true;
             till.addAll(coins);
             coins.clear();
             change.clear();
+            delegate.onComplete();
             return;
         }
         //we have overpayment, change is due:
@@ -124,10 +122,11 @@ class Transaction {
             change.addAll(counter.getChange());
             till.clear();
             till.addAll(counter.getRemainingCoins());
-            isComplete = true;
+            delegate.onComplete();
         } else {
             //there's no way we can give back the change, roll back the transaction:
             cancel();
+            delegate.onOutOfChange();
         }
     }
 
