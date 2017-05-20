@@ -1,10 +1,10 @@
 package com.perlakidigital.vendingMachine;
 
 /**
- * Product represents a purchasable good with a non-negative price and a name
+ * Product represents a purchasable good with a larger than zero price and a name
  * Created by BPerlakiH on 05/05/2017.
  */
-class Product {
+public class Product {
 
     private double price = 1.0;
     private String name = "";
