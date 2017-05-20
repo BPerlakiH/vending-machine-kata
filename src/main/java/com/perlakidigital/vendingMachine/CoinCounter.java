@@ -21,6 +21,7 @@ class CoinCounter {
     CoinCounter(Collection<Double> coinsAvailable, double totalAmount) {
         amount = totalAmount;
         coins = new ArrayList<>(coinsAvailable);
+        Collections.sort(coins);
         Collections.reverse(coins);
         calculate();
     }

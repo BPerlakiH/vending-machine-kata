@@ -20,14 +20,15 @@ public class Transaction {
     private final ArrayList<Double> change;
     private final ArrayList<Double> coins;
     private final Collection<Double> denominations;
+    private final ITransactionDelegate delegate;
     private double price;
     private double duePrice;
-    private boolean isComplete = false;
 
     /**
      * @param productPrice - The total price of the transaction / purchase
      */
-    public Transaction(double productPrice) {
+    public Transaction(double productPrice, ITransactionDelegate delegate) {
+        this.delegate = delegate;
         denominations = DEFAULT_DENOMINATIONS;
         price = productPrice;
         duePrice = price;
@@ -60,7 +61,6 @@ public class Transaction {
     public void cancel() {
         change.addAll(coins);
         coins.clear();
-        isComplete = false;
     }
 
     /**
@@ -100,31 +100,21 @@ public class Transaction {
         }
     }
 
-    /**
-     * A transaction is complete when the sum of inserted coins is equal (an exact amount) or above the price
-     *
-     * @return is enough coins inserted or not
-     */
-    public boolean isComplete() {
-        return isComplete;
-    }
-
-
     private void processCoins() {
         Double coinsTotal = getCoinsTotal();
         if (coinsTotal < price) {
+            duePrice = price - coinsTotal;
             //the transaction is still ongoing, keep collecting coins, do nothing else
-            duePrice = (price * 100 - coinsTotal * 100) / 100;
-            isComplete = false;
+            delegate.onContinue();
             return;
         }
         if (coinsTotal == price) {
             //we got the exact amount, no change is necessary
             duePrice = 0;
-            isComplete = true;
             till.addAll(coins);
             coins.clear();
             change.clear();
+            delegate.onComplete();
             return;
         }
         //we have overpayment, change is due:
@@ -140,10 +130,11 @@ public class Transaction {
             change.addAll(counter.getChange());
             till.clear();
             till.addAll(counter.getRemainingCoins());
-            isComplete = true;
+            delegate.onComplete();
         } else {
             //there's no way we can give back the change, roll back the transaction:
             cancel();
+            delegate.onOutOfChange();
         }
     }
 
