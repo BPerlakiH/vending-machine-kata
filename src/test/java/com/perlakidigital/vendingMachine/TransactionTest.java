@@ -53,7 +53,7 @@ public class TransactionTest {
         trans.addCoin(0.1);
         trans.addCoin(0.55); //invalid
         assertOnlyOneChange(0.55);
-        assertDuePrice((productPrice * 100 - 10) / 100);
+        assertDuePrice(productPrice - 0.1);
         assertOngoing();
     }
 
